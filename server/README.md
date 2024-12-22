@@ -1,7 +1,6 @@
 # Dev Workflow in the server
  ## Recomended Visual code extensions
  * prisma
- * apollographql
  * docker
  * wsl
  * eslint
