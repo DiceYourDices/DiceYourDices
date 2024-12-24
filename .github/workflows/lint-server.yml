@@ -3,12 +3,12 @@ name: Lint server
 on:
   pull_request:
     paths: 
-      - server/**
+      - 'server/**'
   push:
     branches:
       - main
     paths: 
-      - server/**
+      - 'server/**'
 
 jobs:
   eslint:

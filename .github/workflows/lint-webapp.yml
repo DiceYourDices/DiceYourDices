@@ -3,12 +3,12 @@ name: Lint webapp
 on:
   pull_request:
     paths: 
-      - webapp/**
+      - 'webapp/**'
   push:
     branches:
       - main
     paths: 
-      - webapp/**
+      - 'webapp/**'
 
 jobs:
   eslint:
