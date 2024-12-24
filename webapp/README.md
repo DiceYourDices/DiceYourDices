@@ -7,8 +7,9 @@ API_URL=http://localhost:4000
 ```
 
 ## Useful commands
-* `npm run dev`: For getting the server up
 * `npm run generate`: You need the server up. It will read the schema and create types in `src/__generated__`
+* `npm run dev`: For getting the server up
+
 
 ## File system routing
 Next uses file system routing. This means that the `page.tsx` at `app/` is the page displayed at `'/'`, the `page.tsx` at `app/admin` is at `'/admin'` etc.

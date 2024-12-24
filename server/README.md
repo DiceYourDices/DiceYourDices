@@ -6,6 +6,13 @@
  * eslint
  * github actions
 
+## .env configuration
+You will need a .env file at the root of the /server folder with the following content:
+
+```
+DATABASE_URL="postgresql://admin:admin@localhost:5432/dice?schema=public"
+```
+
  ## Prisma
  Every time a change is made to the db schema, you will need to run the following commands:
  * `npm run migrate`: This will update the bd with the latest changes
@@ -23,9 +30,4 @@ Go to the docker-compose folder and run `docker compose up -d`
 ## Apollo sandbox
 I would personally recommend using Postman directly, but if you want something more fancy you can try the [Apollo Sandbox](https://studio.apollographql.com/sandbox/explorer/?referrer=docs-content). You need to have the server running.
 
-## .env configuration
-You will need a .env file at the root of the /server folder with the following content:
 
-```
-DATABASE_URL="postgresql://admin:admin@localhost:5432/dice?schema=public"
-```
