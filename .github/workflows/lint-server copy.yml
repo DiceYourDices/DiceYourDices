@@ -1,21 +1,21 @@
-name: Lint server
+name: Lint webapp
 
 on:
   pull_request:
     paths: 
-      - server/**
+      - webapp/**
   push:
     branches:
       - main
     paths: 
-      - server/**
+      - webapp/**
 
 jobs:
   eslint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./server
+        working-directory: ./webapp
     steps:
       - name: Checkout code
         uses: actions/checkout@v4  

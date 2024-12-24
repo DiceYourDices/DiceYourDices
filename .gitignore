@@ -45,5 +45,12 @@ jspm_packages/
 .next
 out
 
+# vercel
+.vercel
+
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+
+# Codegen output
+__generated__
