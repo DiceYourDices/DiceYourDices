@@ -12,3 +12,69 @@ model users {
   name String? @db.VarChar(100)
   age  Int?
 }
+
+model Class {
+  id               String    @id @default(cuid())
+  index            String    @unique
+  name             String
+  hit_die          Int
+  proficiencies    Proficiency[]
+  saving_throws    SavingThrow[]
+  starting_equipment StartingEquipment[]
+  spellcasting     Spellcasting?
+  subclasses       Subclass[]
+  multi_classing   MultiClassing?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+}
+
+model Proficiency {
+  id        String   @id @default(cuid())
+  index     String   @unique
+  name      String
+  url       String
+  classes   Class[]
+}
+
+model SavingThrow {
+  id        String   @id @default(cuid())
+  index     String   @unique
+  name      String
+  url       String
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String
+}
+
+model StartingEquipment {
+  id        String   @id @default(cuid())
+  equipment Json     // Almacena el objeto equipment completo
+  quantity  Int
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String
+}
+
+model Spellcasting {
+  id                    String   @id @default(cuid())
+  level                 Int
+  spellcasting_ability  Json     // Almacena el objeto ability completo
+  info                  Json     // Almacena el array de información
+  class                 Class    @relation(fields: [classId], references: [id])
+  classId               String   @unique
+}
+
+model MultiClassing {
+  id              String   @id @default(cuid())
+  prerequisites   Json     // Almacena el array de prerequisites
+  proficiencies   Json     // Almacena el array de proficiencies
+  class           Class    @relation(fields: [classId], references: [id])
+  classId         String   @unique
+}
+
+model Subclass {
+  id        String   @id @default(cuid())
+  index     String   @unique
+  name      String
+  url       String
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String
+}
