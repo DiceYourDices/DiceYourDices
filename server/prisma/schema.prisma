@@ -53,11 +53,12 @@ model InactivePlayerOnGame {
 }
 
 model Participant {
-  id       String @id @default(uuid()) @db.Uuid
-  username String @unique @db.Text
-  nickname String @db.Text
-  email    String @db.Text
-  password String
+  id              String           @id @default(uuid()) @db.Uuid
+  username        String           @unique @db.Text
+  nickname        String           @db.Text
+  email           String           @db.Text
+  password        String
+  ActiveCharacter ActiveCharacter?
 
   @@map("participant")
 }
@@ -106,10 +107,37 @@ model ReadyCharacter {
   name    String @db.Text
   race    Race   @relation(fields: [raceId], references: [id])
   raceId  String @map("race_id")
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String @map("user_id")
   class   Class  @relation(fields: [classId], references: [id])
   classId String @map("class_id") @db.Text
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
 
   @@map("ready_character")
+}
+
+model ActiveCharacter {
+  id            String      @id @default(uuid()) @db.Uuid
+  name          String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String      @unique @map("participant_id")
+}
+
+// REPRESENTS THE INTERMEDIATE TABLE BETWEEN PLAYABLECHARACTER AND SPELL
+model PlayableCharactersSpell {
+  spellId String @id @db.Text
+  // character PlayableCharacter @relation(fields: [characterId], references: [id])
+  // characterId String @map("character_id")
+
+  //@@id([spellId, characterId])
+  @@map("playable_character_spell")
+}
+
+// REPRESENTS THE INTERMEDIATE TABLE BETWEEN PLAYABLECHARACTER AND EQUIPMENT
+model PlayableCharactersEquipment {
+  equipmentId String @id @db.Text
+  // character PlayableCharacter @relation(fields: [characterId], references: [id])
+  // characterId String @map("character_id")
+
+  //@@id([equipmentId, characterId])
+  @@map("playable_character_equipment")
 }
