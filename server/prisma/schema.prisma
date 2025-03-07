@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id                String              @id @default(uuid()) @db.Uuid
-  username          String              @unique @db.VarChar(15)
-  nickname          String              @db.VarChar(15)
-  email             String              @db.VarChar(50)
-  password          String
-  notReadyCharacter NotReadyCharacter[]
+  id                 String              @id @default(uuid()) @db.Uuid
+  username           String              @unique @db.Text
+  nickname           String              @db.Text
+  email              String              @db.Text
+  password           String
+  notReadyCharacters NotReadyCharacter[]
+  readyCharacters    ReadyCharacter[]
 
   @@map("user")
 }
 
 model DungeonMaster {
   id       String @id @default(uuid()) @db.Uuid
-  username String @unique @db.VarChar(15)
-  nickname String @db.VarChar(15)
-  email    String @db.VarChar(50)
+  username String @unique @db.Text
+  nickname String @db.Text
+  email    String @db.Text
   password String
   game     Game   @relation(fields: [gameId], references: [id])
   gameId   String @unique @map("game_id")
@@ -32,9 +33,9 @@ model DungeonMaster {
 
 model InactivePlayer {
   id       String                 @id @default(uuid()) @db.Uuid
-  username String                 @unique @db.VarChar(15)
-  nickname String                 @db.VarChar(15)
-  email    String                 @db.VarChar(50)
+  username String                 @unique @db.Text
+  nickname String                 @db.Text
+  email    String                 @db.Text
   password String
   games    InactivePlayerOnGame[]
 
@@ -53,9 +54,9 @@ model InactivePlayerOnGame {
 
 model Participant {
   id       String @id @default(uuid()) @db.Uuid
-  username String @unique @db.VarChar(15)
-  nickname String @db.VarChar(15)
-  email    String @db.VarChar(50)
+  username String @unique @db.Text
+  nickname String @db.Text
+  email    String @db.Text
   password String
 
   @@map("participant")
@@ -63,8 +64,8 @@ model Participant {
 
 model Game {
   id            String                 @id @default(uuid()) @db.Uuid
-  name          String                 @db.VarChar()
-  description   String                 @db.Text()
+  name          String                 @db.Text
+  description   String                 @db.Text
   dungeonMaster DungeonMaster?
   players       InactivePlayerOnGame[]
 
@@ -79,22 +80,36 @@ model Race {
   @@map("race")
 }
 
-model NotReadyCharacter {
-  id     String @id @default(uuid()) @db.Uuid
-  name   String @db.VarChar()
-  race   Race   @relation(fields: [raceId], references: [id])
-  raceId String @map("race_id")
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+model Class {
+  id                 String              @id @db.Text
+  notReadyCharacters NotReadyCharacter[]
+  readyCharacters    ReadyCharacter[]
 
-  @@map("NotReadyCharacter")
+  @@map("class")
+}
+
+model NotReadyCharacter {
+  id      String  @id @default(uuid()) @db.Uuid
+  name    String? @db.Text
+  race    Race?   @relation(fields: [raceId], references: [id])
+  raceId  String? @map("race_id")
+  class   Class?  @relation(fields: [classId], references: [id])
+  classId String? @map("class_id") @db.Text
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String  @map("user_id")
+
+  @@map("not_ready_character")
 }
 
 model ReadyCharacter {
-  id     String @id @default(uuid()) @db.Uuid
-  name   String @db.VarChar()
-  race   Race   @relation(fields: [raceId], references: [id])
-  raceId String @map("race_id")
+  id      String @id @default(uuid()) @db.Uuid
+  name    String @db.Text
+  race    Race   @relation(fields: [raceId], references: [id])
+  raceId  String @map("race_id")
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
+  class   Class  @relation(fields: [classId], references: [id])
+  classId String @map("class_id") @db.Text
 
   @@map("ready_character")
 }
