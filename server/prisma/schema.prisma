@@ -7,28 +7,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id    String @db.Uuid @id @default(uuid())
-  username  String @db.VarChar(15) @unique
-  nickName  String @db.VarChar(15)
-  email     String @db.VarChar(50)
-  password  String
+model User {
+  id                String              @id @default(uuid()) @db.Uuid
+  username          String              @unique @db.VarChar(15)
+  nickname          String              @db.VarChar(15)
+  email             String              @db.VarChar(50)
+  password          String
+  notReadyCharacter NotReadyCharacter[]
+
+  @@map("user")
+}
+
+model DungeonMaster {
+  id       String @id @default(uuid()) @db.Uuid
+  username String @unique @db.VarChar(15)
+  nickname String @db.VarChar(15)
+  email    String @db.VarChar(50)
+  password String
+  game     Game   @relation(fields: [gameId], references: [id])
+  gameId   String @unique @map("game_id")
+
+  @@map("dungeon_master")
+}
+
+model InactivePlayer {
+  id       String                 @id @default(uuid()) @db.Uuid
+  username String                 @unique @db.VarChar(15)
+  nickname String                 @db.VarChar(15)
+  email    String                 @db.VarChar(50)
+  password String
+  games    InactivePlayerOnGame[]
+
+  @@map("inactive_player")
+}
+
+model InactivePlayerOnGame {
+  player   InactivePlayer @relation(fields: [playerId], references: [id])
+  playerId String         @map("player_id")
+  game     Game           @relation(fields: [gameId], references: [id])
+  gameId   String         @map("game_id")
+
+  @@id([playerId, gameId])
+  @@map("inactive_player_on_game")
+}
+
+model Participant {
+  id       String @id @default(uuid()) @db.Uuid
+  username String @unique @db.VarChar(15)
+  nickname String @db.VarChar(15)
+  email    String @db.VarChar(50)
+  password String
+
+  @@map("participant")
+}
+
+model Game {
+  id            String                 @id @default(uuid()) @db.Uuid
+  name          String                 @db.VarChar()
+  description   String                 @db.Text()
+  dungeonMaster DungeonMaster?
+  players       InactivePlayerOnGame[]
+
+  @@map("game")
 }
 
 model Race {
-  id  String @id
-  nrc NotReadyCharacter[]
+  id                 String              @id @db.Text
+  notReadyCharacters NotReadyCharacter[]
+  readyCharacters    ReadyCharacter[]
+
+  @@map("race")
 }
 
 model NotReadyCharacter {
-  id      String @db.Uuid @id @default(uuid())
-  name    String @db.VarChar()
-  race    Race @relation(fields: [raceId], references: [id])
-  raceId  String
+  id     String @id @default(uuid()) @db.Uuid
+  name   String @db.VarChar()
+  race   Race   @relation(fields: [raceId], references: [id])
+  raceId String @map("race_id")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("NotReadyCharacter")
 }
 
 model ReadyCharacter {
-  id   String @db.Uuid @id @default(uuid())
-  name    String @db.VarChar()
-  
+  id     String @id @default(uuid()) @db.Uuid
+  name   String @db.VarChar()
+  race   Race   @relation(fields: [raceId], references: [id])
+  raceId String @map("race_id")
+
+  @@map("ready_character")
 }
